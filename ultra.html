@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra — liquid glass style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Liquid Glass эффект как в Telegram */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .app {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* шапка */
+        .header {
+            background: rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            backdrop-filter: blur(5px);
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-primary {
+            background: rgba(106, 13, 173, 0.8);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(106, 13, 173, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: rgba(128, 0, 255, 0.9);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-link {
+            background: transparent;
+            border: none;
+            color: #ffd700;
+            text-decoration: underline;
+            padding: 5px;
+            font-size: 0.9rem;
+        }
+
+        .btn-link:hover {
+            color: white;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 35px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal h2 {
+            margin-bottom: 25px;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            font-size: 1rem;
+            color: white;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            color: white;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            color: #ffb8b8;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .success-msg {
+            color: #b8ffb8;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-bottom: 3px solid white;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        /* пост карточка с жидким стеклом */
+        .post-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .post-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-placeholder {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .post-author {
+            font-weight: 700;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .post-nick {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .post-text {
+            margin: 15px 0;
+            color: white;
+            white-space: pre-wrap;
+        }
+
+        .post-media {
+            margin: 15px 0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .post-media img, .post-media video {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .comment-section {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: white;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .comment-author {
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .comment-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .comment-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .comment-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* сообщения */
+        .msg-sidebar {
+            display: flex;
+            gap: 20px;
+            height: 65vh;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .dialog-list {
+            width: 35%;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding-right: 15px;
+            overflow-y: auto;
+        }
+
+        .dialog-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dialog-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        .dialog-item.active {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        .msg-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .msg-history {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .msg-bubble {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            width: fit-content;
+            color: white;
+        }
+
+        .msg-mine {
+            background: rgba(106, 13, 173, 0.5);
+            margin-left: auto;
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .msg-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .small-note {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .attach-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .attach-thumb {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* полосы прокрутки в стиле glass */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* исправление цвета текста в инпутах */
+        input, textarea, select {
+            color: white !important;
+        }
+
+        option {
+            background: #6a0dad;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="app" id="app">
+        <div class="header">
+            <div class="logo">ULTRA</div>
+            <div id="authHeaderContainer">
+                <!-- Динамически: либо кнопки вход/регистрация, либо привет -->
+            </div>
+        </div>
+
+        <!-- модалка регистрации / логина -->
+        <div id="authModal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h2 id="modalTitle">Регистрация</h2>
+                <div id="regFields">
+                    <div class="form-group">
+                        <label>Способ регистрации</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="contactMethod" value="phone" checked> 📞 Телефон</label>
+                            <label><input type="radio" name="contactMethod" value="email"> ✉️ Почта</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label id="contactLabel">Номер телефона</label>
+                        <input type="text" id="contactInput" placeholder="+7 900 123-45-67">
+                    </div>
+                    <div class="form-group">
+                        <label>Никнейм (@example)</label>
+                        <input type="text" id="nicknameInput" placeholder="@sasha">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="passwordInput" placeholder="минимум 4 символа">
+                    </div>
+                </div>
+                <!-- Поля входа (логин) -->
+                <div id="loginFields" style="display: none;">
+                    <div class="form-group">
+                        <label>Никнейм или контакт</label>
+                        <input type="text" id="loginIdentifier" placeholder="@sasha или телефон/почта">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="loginPassword" placeholder="••••••">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-link" id="forgotPasswordBtn" style="width:100%;">🔑 Забыли пароль?</button>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#ffd700;">🔑 Пример входа:</label>
+                        <div style="color:white; background:rgba(255,255,255,0.2); padding:10px; border-radius:15px;">
+                            Логин: @test или test@test.com<br>
+                            Пароль: 1234
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id="modalError" class="error-msg"></div>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn btn-outline" id="closeModalBtn">Отмена</button>
+                    <button class="btn btn-primary" id="modalActionBtn">Создать аккаунт</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модалка для ввода кода подтверждения -->
+        <div id="verificationModal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <h2 id="verificationTitle">Подтверждение</h2>
+                <div class="form-group">
+                    <label id="verificationLabel">Введите код из SMS/письма</label>
+                    <input type="text" id="verificationCode" placeholder="6-значный код" maxlength="6">
+                </div>
+                <div class="form-group">
+                    <div id="verificationError" class="error-msg"></div>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn btn-outline" id="cancelVerificationBtn">Отмена</button>
+                    <button class="btn btn-primary" id="confirmVerificationBtn">Подтвердить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной контент (лента / сообщения) -->
+        <div class="tabs" id="mainTabs">
+            <div class="tab active" data-tab="feed">Лента</div>
+            <div class="tab" data-tab="messages">Сообщения</div>
+        </div>
+
+        <div id="feedTab" class="content">
+            <!-- блок создания поста (виден только авторизованным) -->
+            <div id="createPostSection" style="margin-bottom: 25px; display: none;">
+                <div class="post-card">
+                    <textarea id="postTextInput" rows="2" placeholder="Что у вас нового?" style="width:100%; border-radius:30px; padding:15px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); color:white; margin-bottom:10px;"></textarea>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-outline" id="attachMediaBtn">📎 Фото/видео</button>
+                        <button class="btn btn-primary" id="publishPostBtn">Опубликовать</button>
+                        <input type="file" id="mediaFileInput" accept="image/*,video/*" style="display: none;">
+                    </div>
+                    <div id="mediaPreview" class="attach-preview"></div>
+                </div>
+            </div>
+
+            <div id="postsFeed">  
+                <!-- посты будут подгружаться сюда -->
+            </div>
+        </div>
+
+        <div id="messagesTab" class="content" style="display: none;">
+            <div class="msg-sidebar">
+                <div class="dialog-list" id="dialogList">
+                    <div class="small-note">Ваши диалоги</div>
+                    <!-- Динамические чаты -->
+                </div>
+                <div class="msg-area" id="msgArea">
+                    <div id="currentDialogHeader" style="font-weight:700; margin-bottom:8px; color:white;">Выберите чат</div>
+                    <div class="msg-history" id="msgHistory"></div>
+                    <div class="msg-input-area" id="msgInputBlock" style="display: none;">
+                        <input type="text" class="comment-input" id="messageInput" placeholder="Сообщение...">
+                        <button class="btn btn-primary" id="sendMsgBtn">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // --- Хранилище данных ---
+            let users = JSON.parse(localStorage.getItem('ultra_social_users')) || [];
+            let posts = JSON.parse(localStorage.getItem('ultra_social_posts')) || [];
+            let messages = JSON.parse(localStorage.getItem('ultra_social_messages')) || [];
+            let currentUser = JSON.parse(localStorage.getItem('ultra_social_current_user')) || null;
+
+            // --- Добавляем тестового пользователя для примера ---
+            if (users.length === 0) {
+                users.push({
+                    nickname: 'test',
+                    contact: 'test@test.com',
+                    password: '1234',
+                    method: 'email'
+                });
+                posts.push({
+                    id: Date.now() - 100000,
+                    authorNickname: 'test',
+                    text: 'Добро пожаловать в Ultra! Это тестовый пост. ✨',
+                    media: null,
+                    mediaType: null,
+                    date: new Date(Date.now() - 100000),
+                    comments: [{ author: 'test', text: 'Первый комментарий!', date: new Date() }]
+                });
+            }
+
+            // --- Вспомогательные функции сохранения ---
+            function saveUsers() { localStorage.setItem('ultra_social_users', JSON.stringify(users)); }
+            function savePosts() { localStorage.setItem('ultra_social_posts', JSON.stringify(posts)); }
+            function saveMessages() { localStorage.setItem('ultra_social_messages', JSON.stringify(messages)); }
+            function saveCurrentUser() { localStorage.setItem('ultra_social_current_user', JSON.stringify(currentUser)); }
+
+            // --- Элементы DOM ---
+            const authHeader = document.getElementById('authHeaderContainer');
+            const authModal = document.getElementById('authModal');
+            const verificationModal = document.getElementById('verificationModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const regFields = document.getElementById('regFields');
+            const loginFields = document.getElementById('loginFields');
+            const modalError = document.getElementById('modalError');
+            const verificationError = document.getElementById('verificationError');
+            const verificationTitle = document.getElementById('verificationTitle');
+            const verificationLabel = document.getElementById('verificationLabel');
+            const verificationCode = document.getElementById('verificationCode');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelVerificationBtn = document.getElementById('cancelVerificationBtn');
+            const modalActionBtn = document.getElementById('modalActionBtn');
+            const confirmVerificationBtn = document.getElementById('confirmVerificationBtn');
+            const contactInput = document.getElementById('contactInput');
+            const nicknameInput = document.getElementById('nicknameInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginIdentifier = document.getElementById('loginIdentifier');
+            const loginPassword = document.getElementById('loginPassword');
+            const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+            const contactLabel = document.getElementById('contactLabel');
+            const radioPhone = document.querySelector('input[value="phone"]');
+            const radioEmail = document.querySelector('input[value="email"]');
+            const feedTabDiv = document.getElementById('feedTab');
+            const messagesTabDiv = document.getElementById('messagesTab');
+            const tabs = document.querySelectorAll('.tab');
+            const createPostSection = document.getElementById('createPostSection');
+            const postsFeed = document.getElementById('postsFeed');
+            const attachMediaBtn = document.getElementById('attachMediaBtn');
+            const mediaFileInput = document.getElementById('mediaFileInput');
+            const mediaPreview = document.getElementById('mediaPreview');
+            const postTextInput = document.getElementById('postTextInput');
+            const publishPostBtn = document.getElementById('publishPostBtn');
+            const dialogListDiv = document.getElementById('dialogList');
+            const msgHistoryDiv = document.getElementById('msgHistory');
+            const msgInputBlock = document.getElementById('msgInputBlock');
+            const currentDialogHeader = document.getElementById('currentDialogHeader');
+            const messageInput = document.getElementById('messageInput');
+            const sendMsgBtn = document.getElementById('sendMsgBtn');
+
+            let currentMediaFile = null;
+            let currentDialogPartner = null;
+            
+            // Переменные для верификации
+            let pendingUserData = null;
+            let pendingAction = null; // 'register' или 'reset'
+            let generatedCode = null;
+            let targetContact = null;
+            let targetNickname = null;
+
+            // --- Обновление интерфейса ---
+            function renderHeader() {
+                if (currentUser) {
+                    authHeader.innerHTML = `<span style="color:white; font-weight:500;">👤 @${currentUser.nickname}</span>
+                        <button class="btn btn-outline" id="logoutBtn">Выйти</button>`;
+                    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                        currentUser = null;
+                        saveCurrentUser();
+                        renderHeader();
+                        toggleAuthDependentUI();
+                        renderFeed();
+                        closeAllModals();
+                        switchTab('feed');
+                    });
+                } else {
+                    authHeader.innerHTML = `<button class="btn btn-outline" id="showLoginBtn">Войти</button>
+                        <button class="btn btn-primary" id="showRegBtn">Регистрация</button>`;
+                    document.getElementById('showLoginBtn')?.addEventListener('click', () => openModal('login'));
+                    document.getElementById('showRegBtn')?.addEventListener('click', () => openModal('register'));
+                }
+            }
+
+            function toggleAuthDependentUI() {
+                createPostSection.style.display = currentUser ? 'block' : 'none';
+            }
+
+            function openModal(mode) {
+                modalError.innerText = '';
+                if (mode === 'register') {
+                    modalTitle.innerText = 'Регистрация';
+                    regFields.style.display = 'block';
+                    loginFields.style.display = 'none';
+                    modalActionBtn.innerText = 'Создать аккаунт';
+                } else {
+                    modalTitle.innerText = 'Вход';
+                    regFields.style.display = 'none';
+                    loginFields.style.display = 'block';
+                    modalActionBtn.innerText = 'Войти';
+                }
+                authModal.style.display = 'flex';
+            }
+
+            function closeAllModals() {
+                authModal.style.display = 'none';
+                verificationModal.style.display = 'none';
+                verificationCode.value = '';
+                verificationError.innerText = '';
+            }
+
+            function updateContactLabel() {
+                contactLabel.innerText = radioPhone.checked ? 'Номер телефона' : 'Адрес электронной почты';
+            }
+            radioPhone?.addEventListener('change', updateContactLabel);
+            radioEmail?.addEventListener('change', updateContactLabel);
+
+            // --- Функция генерации 6-значного кода ---
+            function generateVerificationCode() {
+                return Math.floor(100000 + Math.random() * 900000).toString();
+            }
+
+            // --- Функция "отправки" кода (имитация) ---
+            function sendVerificationCode(contact, method) {
+                generatedCode = generateVerificationCode();
+                const contactType = method === 'phone' ? 'номер' : 'почту';
+                console.log(`[ULTRA] Код подтверждения для ${contact} (${contactType}): ${generatedCode}`);
+                
+                // Показываем уведомление (в реальном проекте здесь был бы вызов API)
+                alert(`📱 Код подтверждения отправлен на ${contact}\n\n🔐 Ваш код: ${generatedCode}\n\n(В реальном приложении код придет по ${contactType === 'номер' ? 'SMS' : 'email'})`);
+                
+                return generatedCode;
+            }
+
+            // --- Обработка регистрации с верификацией ---
+            function handleRegister() {
+                const method = document.querySelector('input[name="contactMethod"]:checked').value;
+                let contact = contactInput.value.trim();
+                let nickname = nicknameInput.value.trim().replace('@','');
+                const password = passwordInput.value.trim();
+
+                if (!contact || !nickname || !password) {
+                    modalError.innerText = 'Заполните все поля';
+                    return;
+                }
+                if (password.length < 4) {
+                    modalError.innerText = 'Пароль минимум 4 символа';
+                    return;
+                }
+
+                const nicknameLower = nickname.toLowerCase();
+                const contactLower = contact.toLowerCase();
+
+                if (users.some(u => u.nickname.toLowerCase() === nicknameLower)) {
+                    modalError.innerText = '❌ Никнейм @' + nickname + ' уже занят, придумайте другой.';
+                    return;
+                }
+                if (users.some(u => u.contact.toLowerCase() === contactLower)) {
+                    modalError.innerText = '❌ Этот контакт уже зарегистрирован';
+                    return;
+                }
+
+                // Сохраняем данные для верификации
+                pendingUserData = {
+                    nickname: nickname,
+                    contact: contact,
+                    password: password,
+                    method: method
+                };
+                pendingAction = 'register';
+                targetContact = contact;
+
+                // Отправляем код
+                sendVerificationCode(contact, method);
+
+                // Закрываем модалку регистрации и открываем модалку верификации
+                authModal.style.display = 'none';
+                verificationTitle.innerText = 'Подтверждение регистрации';
+                verificationLabel.innerText = method === 'phone' 
+                    ? `Введите код из SMS, отправленного на ${contact}` 
+                    : `Введите код из письма, отправленного на ${contact}`;
+                verificationModal.style.display = 'flex';
+            }
+
+            // --- Обработка восстановления пароля ---
+            function handleForgotPassword() {
+                const identifier = loginIdentifier.value.trim().toLowerCase();
+                
+                if (!identifier) {
+                    modalError.innerText = 'Введите никнейм или контакт для восстановления';
+                    return;
+                }
+
+                // Ищем пользователя
+                const foundUser = users.find(u => 
+                    u.nickname.toLowerCase() === identifier || 
+                    u.contact.toLowerCase() === identifier
+                );
+
+                if (!foundUser) {
+                    modalError.innerText = '❌ Пользователь не найден';
+                    return;
+                }
+
+                // Сохраняем данные для сброса пароля
+                pendingAction = 'reset';
+                targetContact = foundUser.contact;
+                targetNickname = foundUser.nickname;
+                const method = foundUser.method || (foundUser.contact.includes('@') ? 'email' : 'phone');
+
+                // Отправляем код
+                sendVerificationCode(foundUser.contact, method);
+
+                // Закрываем модалку логина и открываем модалку верификации
+                authModal.style.display = 'none';
+                verificationTitle.innerText = 'Восстановление пароля';
+                verificationLabel.innerText = method === 'phone' 
+                    ? `Введите код из SMS для входа под ником @${foundUser.nickname}` 
+                    : `Введите код из письма для входа под ником @${foundUser.nickname}`;
+                verificationModal.style.display = 'flex';
+            }
+
+            // --- Подтверждение кода ---
+            function confirmVerification() {
+                const enteredCode = verificationCode.value.trim();
+                
+                if (!enteredCode) {
+                    verificationError.innerText = 'Введите код';
+                    return;
+                }
+
+                if (enteredCode !== generatedCode) {
+                    verificationError.innerText = '❌ Неверный код, проверьте данные';
+                    
+                    // Если код неверный - выкидываем на главную через 2 секунды
+                    setTimeout(() => {
+                        closeAllModals();
+                        // Показываем сообщение об ошибке в основном интерфейсе
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'post-card';
+                        errorDiv.style.textAlign = 'center';
+                        errorDiv.style.color = '#ffb8b8';
+                        errorDiv.style.margin = '10px';
+                        errorDiv.innerText = '❌ Неверный код, проверьте данные';
+                        
+                        const feed = document.getElementById('postsFeed');
+                        feed.insertBefore(errorDiv, feed.firstChild);
+                        
+                        setTimeout(() => {
+                            if (errorDiv.parentNode) errorDiv.remove();
+                        }, 3000);
+                    }, 500);
+                    
+                    return;
+                }
+
+                // Код верный
+                if (pendingAction === 'register' && pendingUserData) {
+                    // Создаем аккаунт
+                    users.push(pendingUserData);
+                    saveUsers();
+                    
+                    // Автоматически входим
+                    currentUser = pendingUserData;
+                    saveCurrentUser();
+                    
+                    closeAllModals();
+                    renderHeader();
+                    toggleAuthDependentUI();
+                    renderFeed();
+                    
+                    // Очищаем поля
+                    contactInput.value = '';
+                    nicknameInput.value = '';
+                    passwordInput.value = '';
+                    
+                    alert('✅ Аккаунт успешно создан! Добро пожаловать в Ultra.');
+                    
+                } else if (pendingAction === 'reset' && targetNickname) {
+                    // Входим без пароля
+                    const user = users.find(u => u.nickname === targetNickname);
+                    if (user) {
+                        currentUser = user;
+                        saveCurrentUser();
+                        
+                        closeAllModals();
+                        renderHeader();
+                        toggleAuthDependentUI();
+                        renderFeed();
+                        
+                        alert('✅ Вход выполнен! Рекомендуем сменить пароль в настройках.');
+                    }
+                }
+                
+                // Очищаем временные данные
+                pendingUserData = null;
+                pendingAction = null;
+                targetContact = null;
+                targetNickname = null;
+                generatedCode = null;
+                verificationCode.value = '';
+            }
+
+            // --- Обработчики кнопок ---
+            modalActionBtn.addEventListener('click', () => {
+                if (modalTitle.innerText === 'Регистрация') {
+                    handleRegister();
+                } else {
+                    // Обычный вход (без верификации)
+                    const identifier = loginIdentifier.value.trim().toLowerCase();
+                    const pwd = loginPassword.value.trim();
+
+                    if (!identifier || !pwd) {
+                        modalError.innerText = 'Введите логин и пароль';
+                        return;
+                    }
+
+                    const foundUser = users.find(u => 
+                        u.nickname.toLowerCase() === identifier || 
+                        u.contact.toLowerCase() === identifier
+                    );
+
+                    if (!foundUser) {
+                        modalError.innerText = '❌ Пользователь не найден';
+                        return;
+                    }
+
+                    if (foundUser.password !== pwd) {
+                        modalError.innerText = '❌ Неверный пароль';
+                        return;
+                    }
+
+                    currentUser = foundUser;
+                    saveCurrentUser();
+                    closeAllModals();
+                    renderHeader();
+                    toggleAuthDependentUI();
+                    renderFeed();
+                    
+                    loginIdentifier.value = '';
+                    loginPassword.value = '';
+                }
+            });
+
+            // Кнопка "Забыл пароль"
+            forgotPasswordBtn?.addEventListener('click', handleForgotPassword);
+
+            // Подтверждение кода
+            confirmVerificationBtn.addEventListener('click', confirmVerification);
+
+            // Отмена верификации
+            cancelVerificationBtn.addEventListener('click', () => {
+                closeAllModals();
+                pendingUserData = null;
+                pendingAction = null;
+                generatedCode = null;
+            });
+
+            closeModalBtn.addEventListener('click', closeAllModals);
+            window.addEventListener('click', (e) => { 
+                if (e.target === authModal) closeAllModals();
+                if (e.target === verificationModal) closeAllModals();
+            });
+
+            // --- Лента постов (без изменений) ---
+            function renderFeed() {
+                if (posts.length === 0) {
+                    postsFeed.innerHTML = '<div class="post-card" style="text-align:center; color:white;">Пока нет записей. Будьте первым!</div>';
+                    return;
+                }
+                
+                const sorted = [...posts].sort((a,b) => new Date(b.date) - new Date(a.date));
+                let html = '';
+                
+                sorted.forEach(p => {
+                    html += `<div class="post-card" data-post-id="${p.id}">
+                        <div class="post-header">
+                            <div class="avatar-placeholder">${p.authorNickname.slice(0,1).toUpperCase()}</div>
+                            <div>
+                                <div class="post-author">@${p.authorNickname}</div>
+                                <div class="post-date">${new Date(p.date).toLocaleString('ru-RU')}</div>
+                            </div>
+                        </div>
+                        <div class="post-text">${escapeHtml(p.text)}</div>`;
+                        
+                    if (p.media) {
+                        if (p.mediaType === 'image') {
+                            html += `<div class="post-media"><img src="${p.media}" alt="image"></div>`;
+                        } else if (p.mediaType === 'video') {
+                            html += `<div class="post-media"><video src="${p.media}" controls></video></div>`;
+                        }
+                    }
+                    
+                    html += `<div class="comment-section" id="comments-${p.id}">`;
+                    
+                    if (p.comments && p.comments.length) {
+                        p.comments.forEach(c => {
+                            html += `<div class="comment"><span class="comment-author">@${c.author}:</span> ${escapeHtml(c.text)}</div>`;
+                        });
+                    }
+                    
+                    if (currentUser) {
+                        html += `<div class="comment-input-area">
+                            <input type="text" class="comment-input" placeholder="Комментарий..." id="comment-${p.id}-input">
+                            <button class="btn btn-primary" data-post-id="${p.id}" id="comment-btn-${p.id}">Отправить</button>
+                        </div>`;
+                    }
+                    
+                    html += `</div></div>`;
+                });
+                
+                postsFeed.innerHTML = html;
+                
+                if (currentUser) {
+                    sorted.forEach(p => {
+                        const btn = document.getElementById(`comment-btn-${p.id}`);
+                        if (btn) {
+                            btn.addEventListener('click', () => {
+                                const input = document.getElementById(`comment-${p.id}-input`);
+                                const text = input.value.trim();
+                                if (!text) return;
+                                
+                                const post = posts.find(pp => pp.id == p.id);
+                                if (post) {
+                                    if (!post.comments) post.comments = [];
+                                    post.comments.push({ 
+                                        author: currentUser.nickname, 
+                                        text: text, 
+                                        date: new Date() 
+                                    });
+                                    savePosts();
+                                    renderFeed();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            function escapeHtml(unsafe) {
+                if (!unsafe) return '';
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            // --- публикация поста ---
+            attachMediaBtn.addEventListener('click', () => mediaFileInput.click());
+            
+            mediaFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                currentMediaFile = file;
+                
+                if (file.type.startsWith('image')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        mediaPreview.innerHTML = `<img src="${ev.target.result}" class="attach-thumb">`;
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type.startsWith('video')) {
+                    const url = URL.createObjectURL(file);
+                    mediaPreview.innerHTML = `<video src="${url}" controls class="attach-thumb" style="max-width:150px;"></video>`;
+                }
+            });
+
+            publishPostBtn.addEventListener('click', () => {
+                if (!currentUser) return alert('Нужно войти');
+                
+                const text = postTextInput.value.trim();
+                if (!text && !currentMediaFile) return alert('Добавьте текст или медиа');
+                
+                if (currentMediaFile) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const mediaData = ev.target.result;
+                        const mediaType = currentMediaFile.type.startsWith('image') ? 'image' : 'video';
+                        finishPost(text, mediaData, mediaType);
+                    };
+                    reader.readAsDataURL(currentMediaFile);
+                } else {
+                    finishPost(text, null, null);
+                }
+            });
+
+            function finishPost(text, mediaData, mediaType) {
+                const newPost = {
+                    id: Date.now() + Math.random(),
+                    authorNickname: currentUser.nickname,
+                    text: text || '',
+                    media: mediaData,
+                    mediaType: mediaType,
+                    date: new Date(),
+                    comments: []
+                };
+                posts.push(newPost);
+                savePosts();
+                postTextInput.value = '';
+                mediaPreview.innerHTML = '';
+                currentMediaFile = null;
+                mediaFileInput.value = '';
+                renderFeed();
+            }
+
+            // --- ЛИЧНЫЕ СООБЩЕНИЯ ---
+            function renderDialogs() {
+                if (!currentUser) { 
+                    dialogListDiv.innerHTML = '<div class="small-note">Войдите для сообщений</div>'; 
+                    return; 
+                }
+                
+                const myNick = currentUser.nickname;
+                const partners = new Set();
+                
+                messages.forEach(m => {
+                    if (m.from === myNick) partners.add(m.to);
+                    if (m.to === myNick) partners.add(m.from);
+                });
+                
+                users.filter(u => u.nickname !== myNick).forEach(u => partners.add(u.nickname));
+
+                let html = '<div class="small-note">💬 Диалоги:</div>';
+                
+                if (partners.size === 0) {
+                    html += '<div class="small-note">Нет других пользователей</div>';
+                } else {
+                    partners.forEach(p => {
+                        html += `<div class="dialog-item ${currentDialogPartner === p ? 'active' : ''}" data-partner="${p}">@${p}</div>`;
+                    });
+                }
+                
+                dialogListDiv.innerHTML = html;
+                
+                document.querySelectorAll('.dialog-item').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        currentDialogPartner = e.target.dataset.partner;
+                        renderDialogs();
+                        renderMessages();
+                    });
+                });
+            }
+
+            function renderMessages() {
+                if (!currentDialogPartner || !currentUser) {
+                    msgHistoryDiv.innerHTML = '';
+                    currentDialogHeader.innerText = 'Выберите чат';
+                    msgInputBlock.style.display = 'none';
+                    return;
+                }
+                
+                currentDialogHeader.innerText = `Чат с @${currentDialogPartner}`;
+                msgInputBlock.style.display = 'flex';
+                
+                const myNick = currentUser.nickname;
+                const relevant = messages
+                    .filter(m => (m.from === myNick && m.to === currentDialogPartner) || (m.from === currentDialogPartner && m.to === myNick))
+                    .sort((a,b) => new Date(a.date) - new Date(b.date));
+                
+                let html = '';
+                
+                if (relevant.length === 0) {
+                    html = '<div class="msg-bubble">Нет сообщений. Напишите первое!</div>';
+                } else {
+                    relevant.forEach(m => {
+                        const mine = m.from === myNick;
+                        html += `<div class="msg-bubble ${mine ? 'msg-mine' : ''}">
+                            <b>${mine ? 'Я' : '@'+m.from}:</b> ${escapeHtml(m.text)}
+                            <div style="font-size:0.7rem; opacity:0.7;">${new Date(m.date).toLocaleTimeString('ru-RU')}</div>
+                        </div>`;
+                    });
+                }
+                
+                msgHistoryDiv.innerHTML = html;
+                msgHistoryDiv.scrollTop = msgHistoryDiv.scrollHeight;
+            }
+
+            sendMsgBtn.addEventListener('click', () => {
+                if (!currentUser || !currentDialogPartner) return;
+                
+                const text = messageInput.value.trim();
+                if (!text) return;
+                
+                const newMsg = {
+                    from: currentUser.nickname,
+                    to: currentDialogPartner,
+                    text: text,
+                    date: new Date()
+                };
+                
+                messages.push(newMsg);
+                saveMessages();
+                messageInput.value = '';
+                renderMessages();
+                renderDialogs();
+            });
+
+            // --- Табы ---
+            function switchTab(tabId) {
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                if (tabId === 'feed') {
+                    tabs[0].classList.add('active');
+                    feedTabDiv.style.display = 'block';
+                    messagesTabDiv.style.display = 'none';
+                    renderFeed();
+                } else {
+                    tabs[1].classList.add('active');
+                    feedTabDiv.style.display = 'none';
+                    messagesTabDiv.style.display = 'block';
+                    if (currentUser) {
+                        renderDialogs();
+                        renderMessages();
+                    } else {
+                        dialogListDiv.innerHTML = '<div class="small-note">🔒 Войдите, чтобы писать сообщения</div>';
+                        msgHistoryDiv.innerHTML = '';
+                        msgInputBlock.style.display = 'none';
+                    }
+                }
+            }
+
+            tabs[0].addEventListener('click', () => switchTab('feed'));
+            tabs[1].addEventListener('click', () => switchTab('messages'));
+
+            // --- Инициализация ---
+            renderHeader();
+            toggleAuthDependentUI();
+            renderFeed();
+            
+            // Запрос доступа к камере
+            if (currentUser && navigator.mediaDevices) {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                    .then(stream => stream.getTracks().forEach(t => t.stop()))
+                    .catch(() => {});
+            }
+
+            // Добавляем обработчик Enter для отправки сообщений
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMsgBtn.click();
+                }
+            });
+
+            // Enter для подтверждения кода
+            verificationCode.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    confirmVerification();
+                }
+            });
+        })();
+    </script>
+    <header>
+     <a href="#main"; class="app"; id="app"; >бобик</a>
+     <a href="#about"; class="app"; style="color:  rgb(255, 0, 85)";  >нету ничего</a>
+     <a href="#stranger things"; class="app"; style="color:  rgb(255, 136, 0)";  >дедушка</a>
+    </header>
+</body>
+</html>
